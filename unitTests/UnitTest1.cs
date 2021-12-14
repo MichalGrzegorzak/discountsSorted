@@ -21,7 +21,7 @@ public class UnitTest1
     public void Test_Single_Product()
     {
         Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
-        cashier.ScanProduct("A");
+        cashier.ScanProducts("A");
         var result = cashier.GetTotalPrice();
         Assert.Equal(1m, result);
     }
@@ -30,9 +30,53 @@ public class UnitTest1
     public void Test_Double_Items_Discount()
     {
         Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
-        cashier.ScanProduct("A");
-        cashier.ScanProduct("A");
+        cashier.ScanProducts("A", "A");
         var result = cashier.GetTotalPrice();
         Assert.Equal(1.6m, result);
+    }
+
+    [Fact]
+    public void Test_Double_Double_Items_Discount()
+    {
+        Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
+        cashier.ScanProducts("A", "A", "A", "A");
+        var result = cashier.GetTotalPrice();
+        Assert.Equal(3.2m, result);
+    }
+
+    [Fact]
+    public void Test_Three_Items_Discount()
+    {
+        Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
+        cashier.ScanProducts("B", "B", "B");
+        var result = cashier.GetTotalPrice();
+        Assert.Equal(3m, result);
+    }
+
+    [Fact]
+    public void Test_3disc_2disc_1()
+    {
+        Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
+        cashier.ScanProducts("B", "B", "B", "A", "B", "B");
+        var result = cashier.GetTotalPrice();
+        Assert.Equal(7m, result);
+    }
+
+    [Fact]
+    public void Test_Double_A_Single_B()
+    {
+        Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
+        cashier.ScanProducts("A", "B", "A");
+        var result = cashier.GetTotalPrice();
+        Assert.Equal(3.6m, result);
+    }
+
+    [Fact]
+    public void Test_Double_A_Single_A()
+    {
+        Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
+        cashier.ScanProducts("A", "A", "A");
+        var result = cashier.GetTotalPrice();
+        Assert.Equal(2.6m, result);
     }
 }

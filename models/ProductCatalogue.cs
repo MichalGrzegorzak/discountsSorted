@@ -2,7 +2,7 @@
 
 public class ProductCatalogue
 {
-    public ILookup<string, IPricingStrategy> Pricings { get; protected set; }
+    private ILookup<string, IPricingStrategy> Pricings { get; }
 
     public ProductCatalogue(IPricingStrategy[] strategies)
     {
@@ -16,22 +16,23 @@ public class ProductCatalogue
         //get pricings, ordered by highest discount 
         var pricings = Pricings[sku].OrderByDescending(x => x.ProductsTresholdCount).ToList();
 
-        foreach (var pricingStrategy in pricings)
+        while (skuCount > 0)
         {
-            if (skuCount == 0)
-                break;
-
-            price = pricingStrategy.GetPrice(skuCount);
-
-            if (pricingStrategy is RegularStrategy)
+            foreach (var pricingStrategy in pricings)
             {
-                totalPrice += price * skuCount;
-                skuCount = 0;
-            }
-            else if (skuCount >= pricingStrategy.ProductsTresholdCount)
-            {
-                totalPrice += price * pricingStrategy.ProductsTresholdCount;
-                skuCount = skuCount - pricingStrategy.ProductsTresholdCount;
+                price = pricingStrategy.GetPrice(skuCount);
+
+                if (pricingStrategy is RegularStrategy) //=> no more discounts to check
+                {
+                    totalPrice += price * skuCount;
+                    skuCount = 0;
+                }
+                else if (skuCount >= pricingStrategy.ProductsTresholdCount)
+                {
+                    totalPrice += price * pricingStrategy.ProductsTresholdCount;
+                    skuCount = skuCount - pricingStrategy.ProductsTresholdCount;
+                    break; //we need to re-start discount checking
+                }
             }
         }
         return totalPrice;
