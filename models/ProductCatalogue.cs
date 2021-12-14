@@ -18,9 +18,12 @@ public class ProductCatalogue
 
         foreach (var pricingStrategy in pricings)
         {
+            if (skuCount == 0)
+                break;
+
             price = pricingStrategy.GetPrice(skuCount);
 
-            if (pricingStrategy is BasePricingStrategy)
+            if (pricingStrategy is RegularStrategy)
             {
                 totalPrice += price * skuCount;
                 skuCount = 0;

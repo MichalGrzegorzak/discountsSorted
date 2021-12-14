@@ -8,9 +8,9 @@ public class UnitTest1
     IPricingStrategy[] GetStrategiesABC()
     {
         return new IPricingStrategy[] {
-                new BasePricingStrategy("A", 1, 1m),
-                new BasePricingStrategy("B", 1, 2m),
-                new BasePricingStrategy("C", 1, 5m),
+                new RegularStrategy("A", 1m),
+                new RegularStrategy("B", 2m),
+                new RegularStrategy("C", 5m),
                 new TwoItemsDiscountStrategy("A", 0.8m),
                 new TwoItemsDiscountStrategy("B", 1.5m),
                 new ThreeItemsDiscountStrategy("B", 1m)

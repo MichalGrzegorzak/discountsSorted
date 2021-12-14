@@ -1,6 +1,6 @@
 ﻿namespace models;
 
-public class BasePricingStrategy : IPricingStrategy
+public abstract class BasePricingStrategy : IPricingStrategy
 {
     public string Sku { get; }
     public int ProductsTresholdCount { get; }

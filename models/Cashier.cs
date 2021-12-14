@@ -1,8 +1,8 @@
 ﻿namespace models;
 public class Cashier
 {
-    List<BasketItem> _basket = new List<BasketItem>();
     private readonly ProductCatalogue productCatalogue;
+    private Dictionary<string, BasketItem> _basket = new Dictionary<string, BasketItem>();
 
     public Cashier(ProductCatalogue productCatalogue)
     {
@@ -10,15 +10,22 @@ public class Cashier
     }
     public bool ScanProduct(string sku)
     {
-        var cnt = _basket.Count(x => x.Sku == sku);
-        var total = productCatalogue.GetTotalPrice(sku, cnt);
-        _basket.Add(new BasketItem(sku, cnt, total));
-        return true;
+        int skuCount = 0;
+        if (_basket.ContainsKey(sku))
+            skuCount = _basket[sku].Count;
+
+        skuCount++;
+
+        var totalPrice = productCatalogue.GetTotalPrice(sku, skuCount);
+
+        _basket[sku] = new BasketItem(sku, skuCount, totalPrice);
+
+        return (totalPrice != 0);
     }
 
     public decimal GetTotalPrice()
     {
-        return _basket.Sum(x=> x.TotalPrice);
+        return _basket.Values.Sum(x => x.TotalPrice);
     }
 }
 
