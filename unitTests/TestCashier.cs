@@ -3,7 +3,7 @@ using Xunit;
 
 namespace unitTests;
 
-public class UnitTest1
+public class TestCashier
 {
     IPricingStrategy[] GetStrategiesABC()
     {
@@ -20,9 +20,14 @@ public class UnitTest1
     [Fact]
     public void Test_Single_Product()
     {
+        //arrange
         Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
-        cashier.ScanProducts("A");
+        cashier.ScanProduct("A");
+
+        //act
         var result = cashier.GetTotalPrice();
+
+        //assert
         Assert.Equal(1m, result);
     }
 
@@ -31,6 +36,7 @@ public class UnitTest1
     {
         Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
         cashier.ScanProducts("A", "A");
+
         var result = cashier.GetTotalPrice();
         Assert.Equal(1.6m, result);
     }
@@ -40,6 +46,7 @@ public class UnitTest1
     {
         Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
         cashier.ScanProducts("A", "A", "A", "A");
+
         var result = cashier.GetTotalPrice();
         Assert.Equal(3.2m, result);
     }
@@ -49,6 +56,7 @@ public class UnitTest1
     {
         Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
         cashier.ScanProducts("B", "B", "B");
+
         var result = cashier.GetTotalPrice();
         Assert.Equal(3m, result);
     }
@@ -58,6 +66,7 @@ public class UnitTest1
     {
         Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
         cashier.ScanProducts("B", "B", "B", "A", "B", "B");
+
         var result = cashier.GetTotalPrice();
         Assert.Equal(7m, result);
     }
@@ -67,6 +76,7 @@ public class UnitTest1
     {
         Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
         cashier.ScanProducts("A", "B", "A");
+
         var result = cashier.GetTotalPrice();
         Assert.Equal(3.6m, result);
     }
@@ -76,6 +86,7 @@ public class UnitTest1
     {
         Cashier cashier = new Cashier(new ProductCatalogue(GetStrategiesABC()));
         cashier.ScanProducts("A", "A", "A");
+
         var result = cashier.GetTotalPrice();
         Assert.Equal(2.6m, result);
     }
